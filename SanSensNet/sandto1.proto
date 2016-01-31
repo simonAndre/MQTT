@@ -1,0 +1,84 @@
+//	Simon ANDRE dec 2015
+// protocole d'échange de données pour le réseau de capteurs emonsan
+
+// types referecnce https://developers.google.com/protocol-buffers/docs/proto#scalar
+
+syntax = "proto2";
+message FrSolar{
+		required int32 tempHaut=1;
+		required int32 tempMilieu=2;
+		required int32 tempBas=3;
+		required int32 tempExt=4;
+		required NodeMeta metadata=5;
+}
+message FrEmontx{
+		required uint32 p1=1   ;
+		required uint32 p2=2   ;
+		required uint32 p3=3   ;
+		required uint32 p4=4   ;
+		required uint32 V=5    ;
+		required int32 T1=6    ;
+		required int32 T2=7    ;
+		required NodeMeta metadata=8;
+	}
+message FrHygTh{
+		required int32 temp=1;
+		required int32 hygro=2;
+		required int32 V=3;
+		required NodeMeta metadata=4;
+	}
+message FrGlcd{
+		required int32 temp=1;
+		required int32 action=2;
+		required NodeMeta metadata=3;
+}
+
+message FrCommand{
+		required int32 cmd=1;
+		required int32 v1=2;
+		required int32 v2=3;
+		required NodeMeta metadata=4;
+	}
+message FrSetTime{
+		required uint32 year=1	;
+		required uint32 month=2	;
+		required uint32 day=3	;
+		required uint32 hour=4	;
+		required uint32 minute=5;
+		required uint32 second=6;
+}
+message FrGatewayStatus{
+		required uint32 ram=1;
+		required uint32 millis=2;
+		required uint32 nodeid=3;
+}
+
+message NodeMeta{
+    required uint32 nodeFrom = 1;			
+   optional uint32 nodeTo = 2 [default=0];
+   optional int32 rx_rssi = 3 [default=0];
+   optional uint32 Vbatt = 4 [default=0];
+}
+	
+message SanDto1 {
+	
+	enum FrameType{
+		FR_emontx=1;
+		FR_glcd=2;
+		FR_hygth =3;
+		FR_commands=4;
+		FR_solar=5;
+		FR_test=6;
+		FR_lifeframe=7;
+	}
+	required FrameType frameType=1;
+    required int32 nodeFrom = 2;			
+    optional int32 nodeTo = 3 [default=0];
+    optional int32 rx_rssi = 4 [default=-1];
+	optional FrEmontx emontxfr=5;
+	optional FrSolar pushsolar=10;
+	optional FrGlcd eglcdfr=6;
+	optional FrHygTh hygthfr=7;
+	optional FrCommand commandfr=8;
+	
+	}
