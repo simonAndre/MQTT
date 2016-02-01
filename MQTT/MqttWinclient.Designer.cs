@@ -59,12 +59,14 @@
             this.addTopicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBoxtopicpath = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripTextBox_qos = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMIAddTopic = new System.Windows.Forms.ToolStripMenuItem();
             this.subscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unsubscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.isConnectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sanSensNetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendCommandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.propertyGrid3 = new System.Windows.Forms.PropertyGrid();
             this.dataGridView_topics = new System.Windows.Forms.DataGridView();
             this.checkBox_retain = new System.Windows.Forms.CheckBox();
@@ -78,8 +80,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.sanSensNetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendCommandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_topics)).BeginInit();
@@ -338,7 +338,7 @@
             this.addTopicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBoxtopicpath,
             this.toolStripTextBox_qos,
-            this.toolStripMenuItem1});
+            this.toolStripMIAddTopic});
             this.addTopicToolStripMenuItem.Name = "addTopicToolStripMenuItem";
             this.addTopicToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.addTopicToolStripMenuItem.Text = "add topic";
@@ -359,10 +359,10 @@
             // 
             // toolStripMenuItem1
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
-            this.toolStripMenuItem1.Text = "Add this topic";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.toolStripMIAddTopic.Name = "toolStripMenuItem1";
+            this.toolStripMIAddTopic.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMIAddTopic.Text = "Add this topic";
+            this.toolStripMIAddTopic.Click += new System.EventHandler(this.toolStripMIAddTopic_Click);
             // 
             // subscribeAllTopicsToolStripMenuItem
             // 
@@ -385,7 +385,6 @@
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.testToolStripMenuItem.Text = "test";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click_1);
             // 
             // isConnectedToolStripMenuItem
             // 
@@ -400,6 +399,21 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.aboutToolStripMenuItem.Text = "about";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // sanSensNetToolStripMenuItem
+            // 
+            this.sanSensNetToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendCommandToolStripMenuItem});
+            this.sanSensNetToolStripMenuItem.Name = "sanSensNetToolStripMenuItem";
+            this.sanSensNetToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.sanSensNetToolStripMenuItem.Text = "SanSensNet";
+            // 
+            // sendCommandToolStripMenuItem
+            // 
+            this.sendCommandToolStripMenuItem.Name = "sendCommandToolStripMenuItem";
+            this.sendCommandToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.sendCommandToolStripMenuItem.Text = "Send Command";
+            this.sendCommandToolStripMenuItem.Click += new System.EventHandler(this.sendCommandToolStripMenuItem_Click);
             // 
             // propertyGrid3
             // 
@@ -554,21 +568,6 @@
             // 
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
-            // sanSensNetToolStripMenuItem
-            // 
-            this.sanSensNetToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sendCommandToolStripMenuItem});
-            this.sanSensNetToolStripMenuItem.Name = "sanSensNetToolStripMenuItem";
-            this.sanSensNetToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
-            this.sanSensNetToolStripMenuItem.Text = "SanSensNet";
-            // 
-            // sendCommandToolStripMenuItem
-            // 
-            this.sendCommandToolStripMenuItem.Name = "sendCommandToolStripMenuItem";
-            this.sendCommandToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.sendCommandToolStripMenuItem.Text = "Send Command";
-            this.sendCommandToolStripMenuItem.Click += new System.EventHandler(this.sendCommandToolStripMenuItem_Click);
-            // 
             // MqttWinclient
             // 
             this.ClientSize = new System.Drawing.Size(1009, 537);
@@ -637,7 +636,7 @@
         private System.Windows.Forms.ToolStripMenuItem subscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unsubscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMIAddTopic;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer3;

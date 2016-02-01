@@ -10,7 +10,7 @@ namespace MqttClient_handler
     public class SettingsContainer 
     {
         public serversettings BrokerSettings { get; set; }
-        public List<MqqtTopic> Topics { get; set; }
+        public List<MqttTopic> Topics { get; set; }
         public string currenttopicpath { get; set; }
     }
 }
