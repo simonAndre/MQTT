@@ -59,9 +59,10 @@
             this.addTopicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBoxtopicpath = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripTextBox_qos = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripMIAddTopic = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.subscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unsubscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.subscribeEverythingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.isConnectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -328,7 +329,8 @@
             this.topicsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addTopicToolStripMenuItem,
             this.subscribeAllTopicsToolStripMenuItem,
-            this.unsubscribeAllTopicsToolStripMenuItem});
+            this.unsubscribeAllTopicsToolStripMenuItem,
+            this.subscribeEverythingToolStripMenuItem});
             this.topicsToolStripMenuItem.Name = "topicsToolStripMenuItem";
             this.topicsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.topicsToolStripMenuItem.Text = "Topics";
@@ -338,7 +340,7 @@
             this.addTopicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBoxtopicpath,
             this.toolStripTextBox_qos,
-            this.toolStripMIAddTopic});
+            this.toolStripMenuItem1});
             this.addTopicToolStripMenuItem.Name = "addTopicToolStripMenuItem";
             this.addTopicToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.addTopicToolStripMenuItem.Text = "add topic";
@@ -359,10 +361,10 @@
             // 
             // toolStripMenuItem1
             // 
-            this.toolStripMIAddTopic.Name = "toolStripMenuItem1";
-            this.toolStripMIAddTopic.Size = new System.Drawing.Size(160, 22);
-            this.toolStripMIAddTopic.Text = "Add this topic";
-            this.toolStripMIAddTopic.Click += new System.EventHandler(this.toolStripMIAddTopic_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMenuItem1.Text = "Add this topic";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMI_addTopic_Click);
             // 
             // subscribeAllTopicsToolStripMenuItem
             // 
@@ -378,6 +380,13 @@
             this.unsubscribeAllTopicsToolStripMenuItem.Text = "Un-subscribe all topics";
             this.unsubscribeAllTopicsToolStripMenuItem.Click += new System.EventHandler(this.unsubscribeAllTopicsToolStripMenuItem_Click);
             // 
+            // subscribeEverythingToolStripMenuItem
+            // 
+            this.subscribeEverythingToolStripMenuItem.Name = "subscribeEverythingToolStripMenuItem";
+            this.subscribeEverythingToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.subscribeEverythingToolStripMenuItem.Text = "subscribe everything #";
+            this.subscribeEverythingToolStripMenuItem.Click += new System.EventHandler(this.subscribeEverythingToolStripMenuItem_Click);
+            // 
             // testToolStripMenuItem
             // 
             this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -385,6 +394,7 @@
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.testToolStripMenuItem.Text = "test";
+            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click_1);
             // 
             // isConnectedToolStripMenuItem
             // 
@@ -636,7 +646,7 @@
         private System.Windows.Forms.ToolStripMenuItem subscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unsubscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMIAddTopic;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer3;
@@ -662,6 +672,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ToolStripMenuItem sanSensNetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendCommandToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem subscribeEverythingToolStripMenuItem;
     }
 }
 

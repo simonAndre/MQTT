@@ -34,8 +34,7 @@ namespace mqtt
         {
             this.checkconnectiontimer = new Timer(CheckServerState, null, 1000, 1000);
         }
-        
-        public bool MqttConnect(string serveur, string clientid, string username=null, string password=null, bool willRetain=false, byte willQosLevel=1, bool willFlag=false, string willTopic=null, string willMessage=null, bool cleanSession=true, ushort keepAlivePeriod=60)
+        public bool MqttConnect(string serveur, string clientid, string username = null, string password = null, bool willRetain = false, byte willQosLevel = 1, bool willFlag = false, string willTopic = null, string willMessage = null, bool cleanSession = true, ushort keepAlivePeriod = 60)
         {
             // create client instance 
             client = new MqttClient(serveur);
@@ -53,6 +52,7 @@ namespace mqtt
             }
             else
                 client.Connect(clientid);
+            //client.Unsubscribe(new string[] { "/#" });
 
 
             if (OnConnected != null)
@@ -143,7 +143,7 @@ namespace mqtt
         }
 
 
-      
+    
 
         private void Client_MqttMsgUnsubscribed(object sender, MqttMsgUnsubscribedEventArgs e)
         {
@@ -155,7 +155,7 @@ namespace mqtt
             Console.WriteLine(e.MessageId);
         }
 
-      
+
 
 
         private void Client_MqttMsgPublishReceived(object sender, uPLibrary.Networking.M2Mqtt.Messages.MqttMsgPublishEventArgs e)
@@ -198,7 +198,7 @@ namespace mqtt
             }
         }
 
-        public void subscribe(string topic, byte qos = MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE)
+        public void subscribe(string topic, byte qos = MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE)
         {
             MqttTopic to = new MqttTopic(topic, qos, true);
             subscribe(to);
@@ -255,10 +255,11 @@ namespace mqtt
         }
 
         // TODO: remplacer un finaliseur seulement si la fonction Dispose(bool disposing) ci-dessus a du code pour libérer les ressources non managées.
-        // ~Mqtt() {
-        //   // Ne modifiez pas ce code. Placez le code de nettoyage dans Dispose(bool disposing) ci-dessus.
-        //   Dispose(false);
-        // }
+        ~Mqttclient_handler()
+        {
+            // Ne modifiez pas ce code. Placez le code de nettoyage dans Dispose(bool disposing) ci-dessus.
+            Dispose(false);
+        }
 
         // Ce code est ajouté pour implémenter correctement le modèle supprimable.
         public void Dispose()
@@ -271,5 +272,5 @@ namespace mqtt
         #endregion
 
     }
-
+ 
 }
