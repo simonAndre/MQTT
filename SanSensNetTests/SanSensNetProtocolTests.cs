@@ -42,4 +42,5 @@ namespace SanSensNet.Tests
             Assert.AreEqual(2645, decodedComm.v2);
         }
     }
+      
 }

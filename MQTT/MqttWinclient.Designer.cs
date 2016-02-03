@@ -59,7 +59,7 @@
             this.addTopicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBoxtopicpath = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripTextBox_qos = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMIAddTopic = new System.Windows.Forms.ToolStripMenuItem();
             this.subscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unsubscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,7 +80,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.subscribeEverythingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_topics)).BeginInit();
@@ -329,8 +328,7 @@
             this.topicsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addTopicToolStripMenuItem,
             this.subscribeAllTopicsToolStripMenuItem,
-            this.unsubscribeAllTopicsToolStripMenuItem,
-            this.subscribeEverythingToolStripMenuItem});
+            this.unsubscribeAllTopicsToolStripMenuItem});
             this.topicsToolStripMenuItem.Name = "topicsToolStripMenuItem";
             this.topicsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.topicsToolStripMenuItem.Text = "Topics";
@@ -340,7 +338,7 @@
             this.addTopicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBoxtopicpath,
             this.toolStripTextBox_qos,
-            this.toolStripMenuItem1});
+            this.toolStripMIAddTopic});
             this.addTopicToolStripMenuItem.Name = "addTopicToolStripMenuItem";
             this.addTopicToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.addTopicToolStripMenuItem.Text = "add topic";
@@ -361,10 +359,10 @@
             // 
             // toolStripMenuItem1
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
-            this.toolStripMenuItem1.Text = "Add this topic";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMI_addTopic_Click);
+            this.toolStripMIAddTopic.Name = "toolStripMenuItem1";
+            this.toolStripMIAddTopic.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMIAddTopic.Text = "Add this topic";
+            this.toolStripMIAddTopic.Click += new System.EventHandler(this.toolStripMIAddTopic_Click);
             // 
             // subscribeAllTopicsToolStripMenuItem
             // 
@@ -387,7 +385,6 @@
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.testToolStripMenuItem.Text = "test";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click_1);
             // 
             // isConnectedToolStripMenuItem
             // 
@@ -571,13 +568,6 @@
             // 
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
-            // subscribeEverythingToolStripMenuItem
-            // 
-            this.subscribeEverythingToolStripMenuItem.Name = "subscribeEverythingToolStripMenuItem";
-            this.subscribeEverythingToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.subscribeEverythingToolStripMenuItem.Text = "subscribe everything #";
-            this.subscribeEverythingToolStripMenuItem.Click += new System.EventHandler(this.subscribeEverythingToolStripMenuItem_Click);
-            // 
             // MqttWinclient
             // 
             this.ClientSize = new System.Drawing.Size(1009, 537);
@@ -646,7 +636,7 @@
         private System.Windows.Forms.ToolStripMenuItem subscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unsubscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMIAddTopic;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer3;
@@ -672,7 +662,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ToolStripMenuItem sanSensNetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendCommandToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem subscribeEverythingToolStripMenuItem;
     }
 }
 

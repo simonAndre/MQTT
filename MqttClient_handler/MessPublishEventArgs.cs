@@ -19,4 +19,6 @@ namespace mqtt
 
         public bool DupFlag { get; set; }
     }
+
+  
 }
