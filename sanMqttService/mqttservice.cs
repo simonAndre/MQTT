@@ -38,6 +38,7 @@ namespace mqttService
         public bool Start()
         {
             mqtt = new Mqttclient_handler();
+            
             mqtt.MqttConnect(serveur, clientid);
             foreach (var tokv in topicsStr.Split(';'))
             {

@@ -51,7 +51,7 @@ namespace mqtt
         }
 
 
-        public bool MqttConnect(string serveur, string clientid, string username, string password, bool willRetain, byte willQosLevel, bool willFlag, string willTopic, string willMessage, bool cleanSession, ushort keepAlivePeriod)
+        public bool MqttConnect(string serveur, string clientid, string username = null, string password = null, bool willRetain = false, byte willQosLevel = 1, bool willFlag = false, string willTopic = null, string willMessage = null, bool cleanSession = true, ushort keepAlivePeriod = 60)
         {
             // create client instance 
             client = new MqttClient(serveur);
@@ -60,7 +60,18 @@ namespace mqtt
             // register to message received 
             client.MqttMsgPublishReceived += Client_MqttMsgPublishReceived;
             //string clientId = Guid.NewGuid().ToString();
-            var res = client.Connect(clientid, username, password, willRetain, willQosLevel, willFlag, willTopic, willMessage, cleanSession, keepAlivePeriod);
+            if (username != null)
+            {
+                if (willFlag)
+                    client.Connect(clientid, username, password, willRetain, willQosLevel, willFlag, willTopic, willMessage, cleanSession, keepAlivePeriod);
+                else
+                    client.Connect(clientid, username, password);
+            }
+            else
+                client.Connect(clientid);
+            client.Unsubscribe(new string[] { "/#"});
+
+
             if (OnConnected != null)
                 OnConnected(this, new EventArgs());
             return client.IsConnected;
@@ -120,7 +131,7 @@ namespace mqtt
             }
         }
 
-        public void subscribe(string topic, byte qos = MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE)
+        public void subscribe(string topic, byte qos = MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE)
         {
             client.Subscribe(new string[] { topic }, new byte[] { qos });
         }
@@ -168,10 +179,11 @@ namespace mqtt
         }
 
         // TODO: remplacer un finaliseur seulement si la fonction Dispose(bool disposing) ci-dessus a du code pour libérer les ressources non managées.
-        // ~Mqtt() {
-        //   // Ne modifiez pas ce code. Placez le code de nettoyage dans Dispose(bool disposing) ci-dessus.
-        //   Dispose(false);
-        // }
+        ~Mqttclient_handler()
+        {
+            // Ne modifiez pas ce code. Placez le code de nettoyage dans Dispose(bool disposing) ci-dessus.
+            Dispose(false);
+        }
 
         // Ce code est ajouté pour implémenter correctement le modèle supprimable.
         public void Dispose()

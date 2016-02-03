@@ -416,7 +416,7 @@ namespace MQTT
             this.dataGridView_topics.Refresh();
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void toolStripMI_addTopic_Click(object sender, EventArgs e)
         {
             string newtopic = this.toolStripTextBoxtopicpath.Text;
             if (!topics.Any(a => a.path == newtopic))
@@ -623,6 +623,11 @@ namespace MQTT
             }
 
 
+        }
+
+        private void subscribeEverythingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 
