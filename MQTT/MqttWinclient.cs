@@ -15,12 +15,12 @@ using System.Xml.Serialization;
 
 namespace MQTT
 {
-    
+
     public partial class MqttWinclient : Form
     {
         serversettings _serversett;
         Mqttclient_handler mqtt;
-        protected BindingList<MqttTopic> topics = new BindingList<MqttTopic>();
+        protected BindingList<MqttTopic> uitopics = new BindingList<MqttTopic>();
         MqttTopic _currenttopic = null;
         string settingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "MqttManager");
         string _settingsfilepath = null;     //fichier à partir duquel le paramétrage a été éventuellemnt chargé
@@ -35,8 +35,9 @@ namespace MQTT
             serversett = new serversettings();
             propertyGrid3.SelectedObject = serversett;
             propertyGrid3.PropertyValueChanged += PropertyGrid3_PropertyValueChanged;
+            uitopics.ListChanged += Uitopics_ListChanged;
             mqtt = new Mqttclient_handler();
-            this.dataGridView_topics.DataSource = topics;
+            this.dataGridView_topics.DataSource = uitopics;
             this.dataGridView_topics.CellContentClick += DataGridView_topics_CellValueChanged;
             this.dataGridView_topics.CellValueChanged += DataGridView_topics_CellValueChanged1;
             //this.dataGridView_topics.SelectionChanged += DataGridView_topics_SelectionChanged;
@@ -54,22 +55,77 @@ namespace MQTT
             plugExternalEvents();
         }
 
+        private void Uitopics_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            if (mqtt != null)
+            {
+                BindingList<MqttTopic> topics = sender as BindingList<MqttTopic>;
+                switch (e.ListChangedType)
+                {
+                    case ListChangedType.Reset:
+                        if(topics.Count>0)
+                        MessageBox.Show("Reset not supperted");
+                        break;
+                    case ListChangedType.ItemAdded:
+                        if (e.NewIndex >= 0)
+                        {
+                            MqttTopic topic = topics[e.NewIndex];
+                            if (mqtt.GetTopic(topic.Path) == null)
+                                mqtt.AddTopic(topic);
+                        }
+                        break;
+                    case ListChangedType.ItemDeleted:
+                        if (e.OldIndex >= 0)
+                        {
+                            MqttTopic topic = topics[e.OldIndex];
+                            if (mqtt.GetTopic(topic.Path) != null)
+                                mqtt.RemoveTopic(topic.Path);
+                        }
+                        break;
+                    case ListChangedType.ItemMoved:
+                        MessageBox.Show("ItemMoved not supperted");
+                        break;
+                    case ListChangedType.ItemChanged:
+                        if (e.NewIndex >= 0)
+                        {
+                            MqttTopic topic = topics[e.NewIndex];
+                            mqtt.GetTopic(topic.Path).UpdateTopic(topic);
+                        }
+                        break;
+                    case ListChangedType.PropertyDescriptorAdded:
+                        MessageBox.Show("PropertyDescriptorAdded not supperted");
+                        break;
+                    case ListChangedType.PropertyDescriptorDeleted:
+                        MessageBox.Show("PropertyDescriptorDeleted not supperted");
+                        break;
+                    case ListChangedType.PropertyDescriptorChanged:
+                        MessageBox.Show("PropertyDescriptorChanged not supperted");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         private void plugExternalEvents()
         {
             bool extev_raisDisconnected = false;
             MessPublishEventArgs extev_messageArrived = null;
+            TopicChangeEventArgs topicchange = null;
             mqtt.OnConnected += Mqtt_OnConnected;
             mqtt.OnDisconnected += (Mqttclient_handler sender, EventArgs e) =>
-                {
-                    extev_raisDisconnected = true;
-                };
+            {
+                extev_raisDisconnected = true;
+            };
 
             mqtt.OnMessageArrived += (Mqttclient_handler sender, MessPublishEventArgs e) =>
-                {
-                    extev_messageArrived = e;
-                };
-
+            {
+                extev_messageArrived = e;
+            };
+            mqtt.OnTopicChange += (Mqttclient_handler sender, TopicChangeEventArgs e) =>
+            {
+                topicchange = e;
+            };
             //to manage ext events by the UI thread
             tcheckconnection = new Timer();
             tcheckconnection.Interval = 200;
@@ -94,12 +150,38 @@ namespace MQTT
                     }
                     extev_messageArrived = null;
                 }
+                if (topicchange != null)
+                {
+                    switch (topicchange.ChangeType)
+                    {
+                        case TopicChangeType.Add:
+                            if (!uitopics.Any(t => t.Path == topicchange.Topic.Path))
+                            {
+                                uitopics.Add(topicchange.Topic);
+                                topicchange.Topic.PropertyChanged += Topic_PropertyChanged;
+                            }
+                            break;
+                        case TopicChangeType.Remove:
+                            if (uitopics.Any(t => t.Path == topicchange.Topic.Path))
+                                uitopics.Remove(topicchange.Topic);
+                            break;
+                        case TopicChangeType.ClearAll:
+                            if (uitopics.Count > 0)
+                                uitopics.Clear();
+                            break;
+                        default:
+                            break;
+                    }
+                    topicchange = null;
+                }
             };
             tcheckconnection.Enabled = true;
         }
 
+        private void Topic_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
 
-
+        }
 
         private void PropertyGrid3_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
@@ -187,10 +269,6 @@ namespace MQTT
 
         private void Mqtt_OnConnected(Mqttclient_handler sender, EventArgs e)
         {
-            foreach (var t in topics.Where(a => a.Subscribed))
-            {
-                mqtt.subscribe(t.Path, t.Qos);
-            }
 
             this.toolStripStatusLabel_server.BackColor = Color.Green;
             displaystate(true);
@@ -309,11 +387,11 @@ namespace MQTT
             {
                 DataGridViewCheckBoxCell c = this.dataGridView_topics.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewCheckBoxCell;
                 MqttTopic t = (MqttTopic)this.dataGridView_topics.Rows[e.RowIndex].DataBoundItem;
-                if (t.Subscribed)
-                    mqtt.UnSubscribe(t.Path);
-                else
-                    mqtt.subscribe(t.Path, t.Qos);
-                t.Subscribed = !t.Subscribed;
+                /* if (t.Subscribed)
+                     mqtt.UnSubscribe(t.Path);
+                 else
+                     mqtt.subscribe(t.Path, t.Qos);
+                 t.Subscribed = !t.Subscribed;*/
             }
         }
         private void DataGridView_topics_CellValueChanged1(object sender, DataGridViewCellEventArgs e)
@@ -333,7 +411,6 @@ namespace MQTT
 
         private void DataGridView_topics_MouseClick(object sender, MouseEventArgs e)
         {
-
             //activation du menu contextuel sur la grille des topics
             if (e.Button == MouseButtons.Right)
             {
@@ -366,18 +443,13 @@ namespace MQTT
                         {
                             if (t.Subscribed && mqtt.IsConnected)
                                 mqtt.UnSubscribe(t.Path);
-                            this.topics.Remove(t);
+                            this.mqtt.UnSubscribe(t.Path);
                         }
                     };
                     m.MenuItems.Add(menu_deletetopics);
                 }
                 m.Show(dataGridView_topics, new Point(e.X, e.Y));
             }
-
-        }
-        private void testToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            this.topics.Add(new MqttTopic() { Path = Guid.NewGuid().ToString(), Subscribed = false });
 
         }
 
@@ -396,9 +468,9 @@ namespace MQTT
 
         private void subscribeAllTopicsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (var t in topics.Where(a => !a.Subscribed))
+            foreach (var t in uitopics.Where(a => !a.Subscribed))
             {
-                mqtt.subscribe(t.Path, t.Qos);
+                mqtt.subscribe(t);
                 t.Subscribed = true;
             }
             this.dataGridView_topics.Refresh();
@@ -407,7 +479,7 @@ namespace MQTT
         private void unsubscribeAllTopicsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //unsubscribe
-            foreach (var t in topics.Where(a => a.Subscribed))
+            foreach (var t in uitopics.Where(a => a.Subscribed))
             {
                 mqtt.UnSubscribe(t.Path);
                 t.Subscribed = false;
@@ -415,17 +487,18 @@ namespace MQTT
             this.dataGridView_topics.Refresh();
         }
 
-        private void toolStripMI_addTopic_Click(object sender, EventArgs e)
+        private void toolStripMIAddTopic_Click(object sender, EventArgs e)
         {
             string newtopic = this.toolStripTextBoxtopicpath.Text;
-            if (!topics.Any(a => a.Path == newtopic))
+            if (!uitopics.Any(a => a.Path == newtopic))
             {
                 byte qos;
                 if (byte.TryParse(this.toolStripTextBox_qos.Text, out qos) && qos >= 0 && qos <= 2)
                 {
-                    MqttTopic t = new MqttTopic() { Path = newtopic, Qos = qos, Subscribed = false };
+                    MqttTopic t = new MqttTopic(newtopic, qos, false);
                     mqtt.AddTopic(t);
-                    //mqtt.subscribe(t.Path, t.Qos);
+                    //uitopics.Add(t);
+                    //mqtt.subscribe(t.path, t.qos);
                 }
                 else
                     MessageBox.Show("the topic QOS must be from 0 to 2 included");
@@ -463,7 +536,7 @@ namespace MQTT
             SettingsContainer allsettings = new SettingsContainer()
             {
                 BrokerSettings = this.serversett,
-                Topics = this.topics.ToList()
+                Topics = this.uitopics.ToList()
             };
             if (this.currenttopic != null)
                 allsettings.currenttopicpath = this.currenttopic.Path;
@@ -516,9 +589,10 @@ namespace MQTT
                 }
                 if (allsettings != null)
                 {
-                    this.topics.Clear();
+                    this.uitopics.Clear();
                     this.serversett = allsettings.BrokerSettings;
-                    allsettings.Topics.ForEach(t => this.topics.Add(t));
+                    allsettings.Topics.ForEach(t => this.uitopics.Add(t));
+                    if(allsettings.Topics!=null && allsettings.Topics.Any())
                     this.currenttopic = allsettings.Topics.FirstOrDefault(a => a.Path == allsettings.currenttopicpath);
                     settingsfilepath = settingspath;
                     //MessageBox.Show(string.Format("Settings correctly loaded from file {0}", settingfilename));
@@ -563,9 +637,9 @@ namespace MQTT
             saveFileDialog1.Title = "Redirect messages to file";
             saveFileDialog1.ShowHelp = true;
             saveFileDialog1.HelpRequest += (a, z) =>
-        {
-            MessageBox.Show(@"Enter name for the new settings file(It will be located in the MyDocuments\MqttManager Directory)");
-        };
+            {
+                MessageBox.Show(@"Enter name for the new settings file(It will be located in the MyDocuments\MqttManager Directory)");
+            };
             var dr = saveFileDialog1.ShowDialog();
             MessagepersistFile = saveFileDialog1.FileName;
         }
@@ -612,9 +686,10 @@ namespace MQTT
         private void sendCommandToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SendCommand scf = new SendCommand();
-            if(scf.ShowDialog(this)== DialogResult.OK){
+            if (scf.ShowDialog(this) == DialogResult.OK)
+            {
                 SanSensNetProtocol a = new SanSensNetProtocol();
-                byte[] buff = a.Encode_SendCommand(scf.CommandId,scf.V1,scf.V2);
+                byte[] buff = a.Encode_SendCommand(scf.CommandId, scf.V1, scf.V2);
                 string publishtopic = ConfigurationManager.AppSettings["publishCommands_topic"];
                 Console.WriteLine("send commande");
                 MqttMessage mess = new MqttMessage(publishtopic, buff, 1, false);
@@ -626,8 +701,11 @@ namespace MQTT
 
         private void subscribeEverythingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //MqttTopic t = new MqttTopic() { path = "#", qos = 0, subscribed = true };
-          mqtt.subscribe("#",0);
+            mqtt.subscribe("#");
+        }
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
         }
     }

@@ -364,7 +364,7 @@
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
             this.toolStripMenuItem1.Text = "Add this topic";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMI_addTopic_Click);
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMIAddTopic_Click);
             // 
             // subscribeAllTopicsToolStripMenuItem
             // 
@@ -394,7 +394,7 @@
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.testToolStripMenuItem.Text = "test";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click_1);
+            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // isConnectedToolStripMenuItem
             // 
