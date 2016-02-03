@@ -15,7 +15,8 @@ using System.Xml.Serialization;
 
 namespace MQTT
 {
-    
+
+
     public partial class MqttWinclient : Form
     {
         serversettings _serversett;
