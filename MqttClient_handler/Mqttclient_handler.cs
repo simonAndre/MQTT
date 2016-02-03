@@ -34,8 +34,7 @@ namespace mqtt
         {
             this.checkconnectiontimer = new Timer(CheckServerState, null, 1000, 1000);
         }
-        
-        public bool MqttConnect(string serveur, string clientid, string username=null, string password=null, bool willRetain=false, byte willQosLevel=1, bool willFlag=false, string willTopic=null, string willMessage=null, bool cleanSession=true, ushort keepAlivePeriod=60)
+        public bool MqttConnect(string serveur, string clientid, string username = null, string password = null, bool willRetain = false, byte willQosLevel = 1, bool willFlag = false, string willTopic = null, string willMessage = null, bool cleanSession = true, ushort keepAlivePeriod = 60)
         {
             // create client instance 
             client = new MqttClient(serveur);
@@ -53,6 +52,7 @@ namespace mqtt
             }
             else
                 client.Connect(clientid);
+            //client.Unsubscribe(new string[] { "/#" });
 
 
             if (OnConnected != null)
@@ -143,32 +143,7 @@ namespace mqtt
         }
 
 
-        public bool MqttConnect(string serveur, string clientid, string username = null, string password = null, bool willRetain = false, byte willQosLevel = 1, bool willFlag = false, string willTopic = null, string willMessage = null, bool cleanSession = true, ushort keepAlivePeriod = 60)
-        {
-            // create client instance 
-            client = new MqttClient(serveur);
-            client.MqttMsgSubscribed += Client_MqttMsgSubscribed;
-            client.MqttMsgUnsubscribed += Client_MqttMsgUnsubscribed;
-            // register to message received 
-            client.MqttMsgPublishReceived += Client_MqttMsgPublishReceived;
-            //string clientId = Guid.NewGuid().ToString();
-            if (username != null)
-            {
-                if (willFlag)
-                    client.Connect(clientid, username, password, willRetain, willQosLevel, willFlag, willTopic, willMessage, cleanSession, keepAlivePeriod);
-                else
-                    client.Connect(clientid, username, password);
-            }
-            else
-                client.Connect(clientid);
-            client.Unsubscribe(new string[] { "/#"});
-
-
-            if (OnConnected != null)
-                OnConnected(this, new EventArgs());
-            return client.IsConnected;
-        }
-
+    
 
         private void Client_MqttMsgUnsubscribed(object sender, MqttMsgUnsubscribedEventArgs e)
         {
