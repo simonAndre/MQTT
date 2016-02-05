@@ -36,23 +36,25 @@ namespace MQTT
             propertyGrid3.SelectedObject = serversett;
             propertyGrid3.PropertyValueChanged += PropertyGrid3_PropertyValueChanged;
             uitopics.ListChanged += Uitopics_ListChanged;
+            
             mqtt = new Mqttclient_handler();
             this.dataGridView_topics.DataSource = uitopics;
             this.dataGridView_topics.CellContentClick += DataGridView_topics_CellValueChanged;
-            this.dataGridView_topics.CellValueChanged += DataGridView_topics_CellValueChanged1;
-            //this.dataGridView_topics.SelectionChanged += DataGridView_topics_SelectionChanged;
             this.dataGridView_topics.CurrentCellChanged += DataGridView_topics_CurrentCellChanged;
+            this.dataGridView_topics.MouseClick += DataGridView_topics_MouseClick;
+            this.dataGridView_topics.Columns[0].ReadOnly = true;
             this.dataGridView_topics.Columns[0].Width = 130;
             this.dataGridView_topics.Columns[1].Width = 60;
             this.dataGridView_topics.Columns[2].Width = 30;
-            this.dataGridView_topics.MouseClick += DataGridView_topics_MouseClick;
-            this.dataGridView_topics.CursorChanged += DataGridView_topics_CursorChanged;
+
             this.FormClosing += MqttManager_FormClosing;
             addExistingsettingsToMenu();
             saveSettingsToolStripMenuItem.Enabled = false;
             this.splitContainer1.Panel1.Click += disableControlClick;
             this.splitContainer2.Panel2.Click += disableControlClick;
             plugExternalEvents();
+
+            this.Text = "MqttManager -S.Andre  jan 2016 - v" + this.GetType().Assembly.GetName().Version.ToString();
         }
 
         private void Uitopics_ListChanged(object sender, ListChangedEventArgs e)
@@ -62,47 +64,46 @@ namespace MQTT
                 BindingList<MqttTopic> topics = sender as BindingList<MqttTopic>;
                 switch (e.ListChangedType)
                 {
-                    case ListChangedType.Reset:
-                        if(topics.Count>0)
-                        MessageBox.Show("Reset not supperted");
-                        break;
-                    case ListChangedType.ItemAdded:
-                        if (e.NewIndex >= 0)
+                    //case ListChangedType.Reset:
+                    //    if (topics.Count > 0)
+                    //        MessageBox.Show("Reset not supperted");
+                    //    break;
+                    //case ListChangedType.ItemAdded:
+                    //    if (e.NewIndex >= 0)
+                    //    {
+                    //        MqttTopic topic = topics[e.NewIndex];
+                    //        if (mqtt.GetTopic(topic.Path) == null)
+                    //            mqtt.AddTopic(topic);
+                    //    }
+                    //    break;
+                   case ListChangedType.ItemDeleted:
+                        if (this.currenttopic!=null)
                         {
-                            MqttTopic topic = topics[e.NewIndex];
-                            if (mqtt.GetTopic(topic.Path) == null)
-                                mqtt.AddTopic(topic);
+                            if (mqtt.GetTopic(currenttopic.Path) != null)
+                                mqtt.RemoveTopic(currenttopic.Path);
                         }
                         break;
-                    case ListChangedType.ItemDeleted:
-                        if (e.OldIndex >= 0)
-                        {
-                            MqttTopic topic = topics[e.OldIndex];
-                            if (mqtt.GetTopic(topic.Path) != null)
-                                mqtt.RemoveTopic(topic.Path);
-                        }
-                        break;
-                    case ListChangedType.ItemMoved:
-                        MessageBox.Show("ItemMoved not supperted");
-                        break;
-                    case ListChangedType.ItemChanged:
-                        if (e.NewIndex >= 0)
-                        {
-                            MqttTopic topic = topics[e.NewIndex];
-                            mqtt.GetTopic(topic.Path).UpdateTopic(topic);
-                        }
-                        break;
-                    case ListChangedType.PropertyDescriptorAdded:
-                        MessageBox.Show("PropertyDescriptorAdded not supperted");
-                        break;
-                    case ListChangedType.PropertyDescriptorDeleted:
-                        MessageBox.Show("PropertyDescriptorDeleted not supperted");
-                        break;
-                    case ListChangedType.PropertyDescriptorChanged:
-                        MessageBox.Show("PropertyDescriptorChanged not supperted");
-                        break;
-                    default:
-                        break;
+                   //case ListChangedType.ItemMoved:
+                   //     MessageBox.Show("ItemMoved not supperted");
+                   //     break;
+                   // case ListChangedType.ItemChanged:
+                   //     if (e.NewIndex >= 0)
+                   //     {
+                   //         MqttTopic topic = topics[e.NewIndex];
+                   //         mqtt.GetTopic(topic.Path).UpdateTopic(topic);
+                   //     }
+                   //     break;
+                   // case ListChangedType.PropertyDescriptorAdded:
+                   //     MessageBox.Show("PropertyDescriptorAdded not supperted");
+                   //     break;
+                   // case ListChangedType.PropertyDescriptorDeleted:
+                   //     MessageBox.Show("PropertyDescriptorDeleted not supperted");
+                   //     break;
+                   // case ListChangedType.PropertyDescriptorChanged:
+                   //     MessageBox.Show("PropertyDescriptorChanged not supperted");
+                   //     break;
+                   // default:
+                   //     break;
                 }
             }
         }
@@ -376,37 +377,17 @@ namespace MQTT
                 }
             }
         }
-        private void DataGridView_topics_CursorChanged(object sender, EventArgs e)
-        {
 
-        }
 
         private void DataGridView_topics_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 1 && e.RowIndex >= 0)
+            if (e.ColumnIndex > 0 && e.RowIndex >= 0)
             {
-                DataGridViewCheckBoxCell c = this.dataGridView_topics.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewCheckBoxCell;
-                MqttTopic t = (MqttTopic)this.dataGridView_topics.Rows[e.RowIndex].DataBoundItem;
-                /* if (t.Subscribed)
-                     mqtt.UnSubscribe(t.Path);
-                 else
-                     mqtt.subscribe(t.Path, t.Qos);
-                 t.Subscribed = !t.Subscribed;*/
+                if ((this.dataGridView_topics.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewCheckBoxCell).ValueType == typeof(bool))
+                    this.dataGridView_topics.EndEdit();
             }
         }
-        private void DataGridView_topics_CellValueChanged1(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == 2)
-            //change qos
-            {
-                MqttTopic t = (MqttTopic)this.dataGridView_topics.Rows[e.RowIndex].DataBoundItem;
-                if (t.Subscribed)
-                {
-                    mqtt.UnSubscribe(t.Path);
-                    mqtt.subscribe(t.Path, t.Qos);
-                }
-            }
-        }
+
 
 
         private void DataGridView_topics_MouseClick(object sender, MouseEventArgs e)
@@ -441,9 +422,10 @@ namespace MQTT
                     {
                         foreach (var t in topicstodelete)
                         {
-                            if (t.Subscribed && mqtt.IsConnected)
+                            mqtt.RemoveTopic(t.Path);
+                            /*if (t.Subscribed && mqtt.IsConnected)
                                 mqtt.UnSubscribe(t.Path);
-                            this.mqtt.UnSubscribe(t.Path);
+                            this.mqtt.UnSubscribe(t.Path);*/
                         }
                     };
                     m.MenuItems.Add(menu_deletetopics);
@@ -487,26 +469,6 @@ namespace MQTT
             this.dataGridView_topics.Refresh();
         }
 
-        private void toolStripMIAddTopic_Click(object sender, EventArgs e)
-        {
-            string newtopic = this.toolStripTextBoxtopicpath.Text;
-            if (!uitopics.Any(a => a.Path == newtopic))
-            {
-                byte qos;
-                if (byte.TryParse(this.toolStripTextBox_qos.Text, out qos) && qos >= 0 && qos <= 2)
-                {
-                    MqttTopic t = new MqttTopic(newtopic, qos, false);
-                    mqtt.AddTopic(t);
-                    //uitopics.Add(t);
-                    //mqtt.subscribe(t.path, t.qos);
-                }
-                else
-                    MessageBox.Show("the topic QOS must be from 0 to 2 included");
-            }
-            else
-                MessageBox.Show("this topic is already in the topic list");
-
-        }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -592,8 +554,8 @@ namespace MQTT
                     this.uitopics.Clear();
                     this.serversett = allsettings.BrokerSettings;
                     allsettings.Topics.ForEach(t => this.uitopics.Add(t));
-                    if(allsettings.Topics!=null && allsettings.Topics.Any())
-                    this.currenttopic = allsettings.Topics.FirstOrDefault(a => a.Path == allsettings.currenttopicpath);
+                    if (allsettings.Topics != null && allsettings.Topics.Any())
+                        this.currenttopic = allsettings.Topics.FirstOrDefault(a => a.Path == allsettings.currenttopicpath);
                     settingsfilepath = settingspath;
                     //MessageBox.Show(string.Format("Settings correctly loaded from file {0}", settingfilename));
                 }
@@ -704,9 +666,23 @@ namespace MQTT
             mqtt.subscribe("#");
         }
 
-        private void testToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
+
+        private void addTopicToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewTopic nt = new NewTopic();
+            var res = nt.ShowDialog();
+
+            if (res == DialogResult.OK)
+            {
+                if (!uitopics.Any(a => a.Path == nt.TopicPath))
+                {
+                    MqttTopic t = new MqttTopic(nt.TopicPath, (byte)nt.Qos, nt.subscribed);
+                    mqtt.AddTopic(t);
+                }
+                else
+                    MessageBox.Show("this topic is already in the topic list");
+            }
         }
     }
 

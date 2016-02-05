@@ -7,7 +7,7 @@
     <ProjectGuid>{91356A00-6D5A-40C9-B242-F2C5FBA57C9E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MqttFFserviceEP</RootNamespace>
+    <RootNamespace>mqtt</RootNamespace>
     <AssemblyName>MqttFFserviceEP</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,10 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="mqStoreService.cs" />
+    <Compile Include="mqStoreService_redis.cs" />
     <Compile Include="MqttFFserviceEP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\AzimutDomaine.interfaces\AzimutDomaine.interfaces.csproj">
+      <Project>{9ed88553-bf35-4dd4-9bc5-25130fc48f42}</Project>
+      <Name>AzimutDomaine.interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\Common.csproj">
       <Project>{dc61c92c-c4f0-4420-ade2-832b1034e365}</Project>
       <Name>Common</Name>
@@ -61,6 +71,9 @@
       <Project>{de67629e-bf09-4991-b858-0a85cb207b83}</Project>
       <Name>MqttClient_handler</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

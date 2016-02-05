@@ -87,6 +87,8 @@ namespace mqtt
             if (!_topics.ContainsKey(topic.Path))
             {
                 _topics.Add(topic.Path, topic);
+
+                _subscribetopic(topic);
                 if (OnTopicChange != null)
                     OnTopicChange(this, new TopicChangeEventArgs(topic, TopicChangeType.Add));
                 topic.PropertyChanged += Topic_PropertyChanged;
@@ -102,13 +104,14 @@ namespace mqtt
                         OnTopicChange(this, new TopicChangeEventArgs(sender as MqttTopic, TopicChangeType.Update));
                     break;
                 case "Subscribed":
-                    if (((MqttTopic)sender).Subscribed)
-                        client.Subscribe(new string[] { ((MqttTopic)sender).Path }, new byte[] { ((MqttTopic)sender).Qos });
+                    MqttTopic t = ((MqttTopic)sender);
+                    if (t.Subscribed)
+                        _subscribetopic(t);
                     else
-                        client.Unsubscribe(new string[] { ((MqttTopic)sender).Path });
+                        _unsubscribetopic(t);
 
                     if (OnTopicChange != null)
-                        OnTopicChange(this, new TopicChangeEventArgs(sender as MqttTopic, TopicChangeType.Update));
+                        OnTopicChange(this, new TopicChangeEventArgs(t, TopicChangeType.Update));
                     break;
                 case "Path":
                     break;
@@ -117,11 +120,24 @@ namespace mqtt
             }
         }
 
+
+        private void _subscribetopic(MqttTopic topic)
+        {
+            if (client!=null && topic.Subscribed)
+                client.Subscribe(new string[] { topic.Path }, new byte[] { topic.Qos });
+        }
+        private void _unsubscribetopic(MqttTopic topic)
+        {
+            if (client != null && !topic.Subscribed)
+                client.Unsubscribe(new string[] { topic.Path });
+        }
+
         public void RemoveTopic(string topicpath)
         {
             if (_topics.ContainsKey(topicpath))
             {
                 var oldtopic = _topics[topicpath];
+                _unsubscribetopic(oldtopic);
                 oldtopic.PropertyChanged -= Topic_PropertyChanged;
                 _topics.Remove(topicpath);
                 if (OnTopicChange != null)
@@ -143,7 +159,7 @@ namespace mqtt
         }
 
 
-    
+
 
         private void Client_MqttMsgUnsubscribed(object sender, MqttMsgUnsubscribedEventArgs e)
         {
@@ -209,11 +225,11 @@ namespace mqtt
             var thetopic = GetTopic(topic);
             if (thetopic != null && thetopic.Subscribed)
             {
-                thetopic.Subscribed = false;
+                thetopic.Subscribed = false;        
             }
         }
 
-     
+
         public void publish(string topic, string message, byte qos, bool retain = false)
         {
             client.Publish(topic, Encoding.UTF8.GetBytes(message), qos, retain);
@@ -272,5 +288,5 @@ namespace mqtt
         #endregion
 
     }
- 
+
 }

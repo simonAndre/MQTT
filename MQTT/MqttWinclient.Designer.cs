@@ -57,9 +57,6 @@
             this.toolStripTextBox_publishwait = new System.Windows.Forms.ToolStripTextBox();
             this.topicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addTopicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripTextBoxtopicpath = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripTextBox_qos = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.subscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unsubscribeAllTopicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.subscribeEverythingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -337,34 +334,10 @@
             // 
             // addTopicToolStripMenuItem
             // 
-            this.addTopicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripTextBoxtopicpath,
-            this.toolStripTextBox_qos,
-            this.toolStripMenuItem1});
             this.addTopicToolStripMenuItem.Name = "addTopicToolStripMenuItem";
             this.addTopicToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.addTopicToolStripMenuItem.Text = "add topic";
-            // 
-            // toolStripTextBoxtopicpath
-            // 
-            this.toolStripTextBoxtopicpath.Name = "toolStripTextBoxtopicpath";
-            this.toolStripTextBoxtopicpath.Size = new System.Drawing.Size(100, 23);
-            this.toolStripTextBoxtopicpath.Text = "/";
-            this.toolStripTextBoxtopicpath.ToolTipText = "topic path";
-            // 
-            // toolStripTextBox_qos
-            // 
-            this.toolStripTextBox_qos.Name = "toolStripTextBox_qos";
-            this.toolStripTextBox_qos.Size = new System.Drawing.Size(100, 23);
-            this.toolStripTextBox_qos.Text = "1";
-            this.toolStripTextBox_qos.ToolTipText = "topic QOS";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
-            this.toolStripMenuItem1.Text = "Add this topic";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMIAddTopic_Click);
+            this.addTopicToolStripMenuItem.Click += new System.EventHandler(this.addTopicToolStripMenuItem_Click);
             // 
             // subscribeAllTopicsToolStripMenuItem
             // 
@@ -394,7 +367,6 @@
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.testToolStripMenuItem.Text = "test";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // isConnectedToolStripMenuItem
             // 
@@ -641,12 +613,9 @@
         private System.Windows.Forms.ToolStripMenuItem cleanReceiveListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem topicsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addTopicToolStripMenuItem;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxtopicpath;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBox_qos;
         private System.Windows.Forms.ToolStripMenuItem subscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unsubscribeAllTopicsToolStripMenuItem;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer3;
